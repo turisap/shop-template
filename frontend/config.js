@@ -4,4 +4,5 @@ export const perPage = 4;
 
 
 // Front end constants
-export const applicationName = "Turisap Shop";
+export const APPLICATION_NAME = "Turisap DS";
+export const CITY = 'Auckland';

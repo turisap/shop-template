@@ -11,7 +11,7 @@ const Meta = () => (
         <meta charSet="utf-8" />
         <link rel="shortcut icon" href="/static/favicon.png" />
         <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
-        <title>{config.applicationName}</title>
+        <title>{config.APPLICATION_NAME}</title>
     </Head>
 );
 
