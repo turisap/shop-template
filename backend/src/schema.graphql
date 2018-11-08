@@ -1,8 +1,12 @@
 # There always must be sth, otherwise the yoga server might fall
+type Dog {
+    name : String!
+}
+
 type Mutation {
-    hi : String!
+    createDog(name : String!) : Dog
 }
 
 type Query {
-    hui : String!
+    dogs : [Dog]!
 }
