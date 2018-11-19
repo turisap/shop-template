@@ -57,21 +57,23 @@ class CreateItem extends Component {
     };
 
     uploadFile = async e => {
+        console.log('uploading file...');
+        const files = e.target.files;
         const data = new FormData();
-        data.append('file', e.target.files[0]);
+        data.append('file', files[0]);
         data.append('upload_preset', 'shop-template');
+
         const res = await fetch(CONFIG.CLOUDINARY_API_ENDPOINT, {
-            method : 'POST',
-            body : data,
-            mode : 'no-cors'
+            method: 'POST',
+            body: data,
         });
         const file = await res.json();
         console.log(file);
         this.setState({
-            image : file.secure_url,
-            largeImage : file.eager[0].secure_url
-        })
-    }
+            image: file.secure_url,
+            largeImage: file.eager[0].secure_url,
+        });
+    };
 
     render() {
         return (
@@ -87,7 +89,6 @@ class CreateItem extends Component {
                             <label htmlFor="file">
                                 Image
                                 <input
-                                    value={this.state.image}
                                     onChange={this.uploadFile}
                                     type="file"
                                     id="file"
@@ -95,6 +96,7 @@ class CreateItem extends Component {
                                     placeholder="upload an image"
                                     required
                                 />
+                                {this.state.image && <img src={this.state.image} width={"200"} alt={"upload preview"}/>}
                             </label>
                             <label htmlFor="title">
                                 Title
