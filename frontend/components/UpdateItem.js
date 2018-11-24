@@ -6,15 +6,15 @@ import Form from './styles/Form';
 import * as CONFIG from '../config';
 import ErrorMessage from './ErrorMessage';
 
-const CREATE_ITEM_MUTATION = gql`
-    mutation CREATE_ITEM_MUTATION (
+const UPDATE_ITEM_MUTATION = gql`
+    mutation UPDATE_ITEM_MUTATION (
         $title : String!
         $description : String!
         $price : Int!
         $image : String,
         $largeImage : String
     ){
-        createItem (
+        updateItem (
             title : $title
             description : $description
             price : $price,
@@ -27,7 +27,7 @@ const CREATE_ITEM_MUTATION = gql`
     }
 `;
 
-class CreateItem extends Component {
+class UpdateItem extends Component {
     state = {
         title : "",
         description : "",
@@ -56,29 +56,11 @@ class CreateItem extends Component {
         })
     };
 
-    uploadFile = async e => {
-        console.log('uploading file...');
-        const files = e.target.files;
-        const data = new FormData();
-        data.append('file', files[0]);
-        data.append('upload_preset', 'shop-template');
-
-        const res = await fetch(CONFIG.CLOUDINARY_API_ENDPOINT, {
-            method: 'POST',
-            body: data,
-        });
-        const file = await res.json();
-        console.log(file);
-        this.setState({
-            image: file.secure_url,
-            largeImage: file.eager[0].secure_url,
-        });
-    };
 
     render() {
         return (
             <Mutation
-                mutation={CREATE_ITEM_MUTATION}
+                mutation={UPDATE_ITEM_MUTATION}
                 variables={this.state}
             >
                 {(createItemFunction, { loading, error }) => (
@@ -86,18 +68,6 @@ class CreateItem extends Component {
                         <ErrorMessage error={error}/>
                         {/** setting loading animations and disabling inputs while submitting the form **/}
                         <fieldset disabled={loading} aria-busy={loading}>
-                            <label htmlFor="file">
-                                Image
-                                <input
-                                    onChange={this.uploadFile}
-                                    type="file"
-                                    id="file"
-                                    name="file"
-                                    placeholder="upload an image"
-                                    required
-                                />
-                                {this.state.image && <img src={this.state.image} width={"200"} alt={"upload preview"}/>}
-                            </label>
                             <label htmlFor="title">
                                 Title
                                 <input
@@ -142,7 +112,7 @@ class CreateItem extends Component {
     }
 }
 
-CreateItem.propTypes = {};
+UpdateItem.propTypes = {};
 
-export default CreateItem;
-export { CREATE_ITEM_MUTATION };
+export default UpdateItem;
+export { UPDATE_ITEM_MUTATION };
