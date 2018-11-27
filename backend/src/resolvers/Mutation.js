@@ -14,9 +14,9 @@ const mutations = {
       },
 
       updateItem(parent, args, ctx, info) {
-          // get a copy of data for updates and revome id because we don't need to update it
-          const data = {...args};
-          delete data.id;
+          // get a copy of data for upand revome id because we don't need to update it
+          const updates = {...args};
+          delete updates.id;
           return ctx.db.mutation.updateItem({
               data : updates,
               where : {

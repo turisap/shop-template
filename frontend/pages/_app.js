@@ -6,7 +6,7 @@
 import App, { Container } from 'next/app';
 import NProgress from "nprogress";
 import { ApolloProvider } from 'react-apollo';
-import withData from '../lib/withData';
+import WithData from '../lib/withData';
 import Router from 'next/router';
 import Page from '../components/Page';
 
@@ -26,28 +26,28 @@ Router.onRouteChangeError = () => {
 
 
 class MyApp extends App {
-    static async getInitialProps({ Component, ctx }) {
+    static async getInitialProps({Component, ctx}) {
         let pageProps = {};
-        if (Component.getInitialProps) {
+        if(Component.getInitialProps) {
             pageProps = await Component.getInitialProps(ctx);
         }
-        // this exposes the query to the user
+        // exposes query parameters to every page
         pageProps.query = ctx.query;
-        return { pageProps };
+        return { pageProps }
     }
+
     render() {
         const { Component, apollo, pageProps } = this.props;
-
         return (
-            <Container>
-                <ApolloProvider client={apollo}>
+            <ApolloProvider client={apollo}>
+                <Container>
                     <Page>
-                        <Component {...pageProps} />
+                        <Component {...pageProps}/>
                     </Page>
-                </ApolloProvider>
-            </Container>
-        );
+                </Container>
+            </ApolloProvider>
+        )
     }
 }
 
-export default withData(MyApp);
+export default WithData(MyApp);
