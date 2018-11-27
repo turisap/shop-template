@@ -67,7 +67,6 @@ class UpdateItem extends Component {
                ...this.state
            }
         });
-        console.log('UPDAted')
     };
 
 
@@ -124,7 +123,7 @@ class UpdateItem extends Component {
                                             />
                                         </label>
                                     </fieldset>
-                                    <button>Submit</button>
+                                    <button>Sav{loading ? 'ing' : 'e'} changes</button>
                                 </Form>
                             )}
                         </Mutation>
