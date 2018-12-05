@@ -4,6 +4,7 @@ import gql from 'graphql-tag';
 import styled from 'styled-components';
 import Item from './Item';
 import Pagination from './Pagination';
+import * as CONFIG from '../config';
 
 const Centre = styled.div`
     text-align: center;
@@ -18,8 +19,8 @@ const ItemList = styled.div`
 `;
 
 const ALL_ITEMS_QUERY = gql`
-    query ALL_ITEMS_QUERY {
-        items {
+    query ALL_ITEMS_QUERY($skip : Int = 0, $first : Int = ${CONFIG.PERPAGE}) {
+        items(first : $first, skip : $skip, orderBy : createdAt_DESC) {
             id
             title
             price
@@ -32,11 +33,20 @@ const ALL_ITEMS_QUERY = gql`
 
 
 class Items extends Component {
+
+    /**
+     * Gets the number of items to skip for pagination
+     * @returns {number}
+     */
+    itemsToSkip = () => (
+        this.props.page * CONFIG.PERPAGE - CONFIG.PERPAGE
+    )
+
     render() {
         return (
             <Centre>
                 <Pagination  page={this.props.page}/>
-                <Query query={ALL_ITEMS_QUERY}>
+                <Query query={ALL_ITEMS_QUERY} variables={{skip : this.itemsToSkip(), first : CONFIG.PERPAGE}}>
                     {payload => {
                             const {data, error, loading} = payload;
                             if (loading) return <p>Loading...</p>;

@@ -47,7 +47,7 @@ const Header = () => {
         <StyledHeader>
             <div className="bar">
                 <Logo>
-                    <Link href="/">
+                    <Link href="/items">
                         <a>{config.APPLICATION_NAME}</a>
                     </Link>
                 </Logo>
