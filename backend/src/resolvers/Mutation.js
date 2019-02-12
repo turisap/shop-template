@@ -1,37 +1,4 @@
-const mutations = {
-      async createItem(parent, args, ctx, info) {
-        // TODO Check if a user is logged in
-        const item = await ctx.db.mutation.createItem(
-          {
-            data: {
-              ...args
-            }
-          },
-          info
-        );
-
-        return item;
-      },
-
-      updateItem(parent, args, ctx, info) {
-          // get a copy of data for upand revome id because we don't need to update it
-          const updates = {...args};
-          delete updates.id;
-          return ctx.db.mutation.updateItem({
-              data : updates,
-              where : {
-                  id : args.id
-              }
-          }, info)
-      },
-
-      async deleteItem(parent, args, ctx, info) {
-          const where = { id : args.id };
-          // find that item
-          const item = await ctx.db.query.item({where}, `{ id title }`);
-          // TODO check permissions if a user can delete it
-          return ctx.db.mutation.deleteItem({where}, info);
-      }
-};
+// some comments to test
+const mutations = {};
 
 module.exports = mutations;

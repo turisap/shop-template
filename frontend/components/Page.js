@@ -1,18 +1,8 @@
-/**
- * This component is for rendering other components which are needed at every page
- * as Header or NavBar
- */
-
 import React, {Component} from 'react';
-import styled, {ThemeProvider, injectGlobal} from 'styled-components';
+import styled, { ThemeProvider, injectGlobal} from 'styled-components';
 import Header from './Header';
 import Meta from './Meta';
 
-
-
-/**
- * Theme object for styled components
- */
 const theme = {
     red: '#FF0000',
     black: '#393939',
@@ -23,52 +13,44 @@ const theme = {
     bs: '0 12px 24px 0 rgba(0, 0, 0, 0.09)',
 };
 
-
-
-/**
- * Global styles (all resets, fonts, etc)
- */
-injectGlobal`
-    @font-face {
-        font-family: radnika-next;
-        src: url('/static/radnikanext-medium-webfont.woff2');
-        format: ('woff2');
-        font-weight: normal;
-        font-style: normal;
-    }
-    html {
-        font-family: radnika-next;
-        box-sizing: border-box;
-        font-size: 10px;
-    }
-    *, *:before, *:after {
-        box-sizing: inherit;
-    }
-    body {
-        padding: 0px;
-        margin: 0px;
-        font-size: 1.5rem;
-        line-height: 2;
-    }
-    a {
-        text-decoration: none;
-        color: ${theme.black};
-    }
-`;
-
-
-
 const StyledPage = styled.div`
-    background: white;
-    color: ${props => props.theme.black};
+    background : white;
+    color : black;
 `;
 
 const Inner = styled.div`
-    padding: 2rem;
-    margin: 0 auto;
-    max-width: ${props => props.theme.maxWidth};
+    max-width : ${props => props.theme.maxWidth};
+    margin : 0 auto;
+    padding : 2rem;
+    background : white;
 `;
 
+injectGlobal`
+    @font-face {
+    font-family: 'radnika_next';
+    src: url('/static/radnikanext-medium-webfont.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    }
+    html {
+    box-sizing: border-box;
+    font-size: 10px;
+    }
+    *, *:before, *:after {
+    box-sizing: inherit;
+    }
+    body {
+    padding: 0;
+    margin: 0;
+    font-size: 1.5rem;
+    line-height: 2;
+    font-family: 'radnika_next';
+    }
+    a {
+    text-decoration: none;
+    color: ${theme.black};
+    }
+`;
 
 
 class Page extends Component {
@@ -85,5 +67,6 @@ class Page extends Component {
     }
 }
 
+Page.propTypes = {};
 
 export default Page;

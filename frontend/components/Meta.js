@@ -1,9 +1,5 @@
-/**
- * All meta data including third-parties CSS, favicons, charset, viewport and default title
- */
-
+import { CONFIG } from "../config";
 import Head from 'next/head';
-import * as config from '../config';
 
 const Meta = () => (
     <Head>
@@ -11,7 +7,7 @@ const Meta = () => (
         <meta charSet="utf-8" />
         <link rel="shortcut icon" href="/static/favicon.png" />
         <link rel="stylesheet" type="text/css" href="/static/nprogress.css" />
-        <title>{config.APPLICATION_NAME}</title>
+        <title>{CONFIG.SHOP_NAME}</title>
     </Head>
 );
 

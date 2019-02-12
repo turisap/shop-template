@@ -1,7 +1,26 @@
 import Link from 'next/link';
+import Router from 'next/router';
+import NProgress from 'nprogress';
 import styled from 'styled-components';
-import * as config from '../config';
-import NavBar from './NavBar';
+import Nav from './Nav';
+import { CONFIG } from '../config';
+
+
+/**
+ * Listening for Router events to trigger nprogress bar
+ */
+Router.onRouteChangeStart = () => {
+    NProgress.start();
+};
+
+Router.onRouteChangeComplete = () => {
+    NProgress.done();
+};
+
+Router.onRouteChangeError = () => {
+    NProgress.done();
+};
+
 
 const Logo = styled.h1`
   font-size: 4rem;
@@ -41,24 +60,22 @@ const StyledHeader = styled.header`
   }
 `;
 
-
-const Header = () => {
-    return (
-        <StyledHeader>
-            <div className="bar">
-                <Logo>
-                    <Link href="/items">
-                        <a>{config.APPLICATION_NAME}</a>
-                    </Link>
-                </Logo>
-            </div>
-            <div className="sub-bar">
-                <NavBar/>
-            </div>
+const Header = () => (
+    <StyledHeader>
+        <div className="bar">
+            <Logo>
+                <Link href="/">
+                    <a>{CONFIG.SHOP_NAME}</a>
+                </Link>
+            </Logo>
+            <Nav/>
+        </div>
+        <div className="sub-bar">
             <p>Search</p>
-            <div>Cart</div>
-        </StyledHeader>
-    );
-};
+        </div>
+        <div>Cart</div>
+    </StyledHeader>
+);
 
 export default Header;
+
