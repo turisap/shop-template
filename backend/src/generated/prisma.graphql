@@ -35,7 +35,7 @@ type ItemConnection {
 
 input ItemCreateInput {
   title: String!
-  description: String!
+description: String!
   image: String!
   largeImage: String!
   price: Int!
@@ -425,14 +425,12 @@ type Query {
   item(where: ItemWhereUniqueInput!): Item
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   itemsConnection(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemConnection!
-
   """Fetches an object given its ID"""
   node(
     """The ID of an object"""
     id: ID!
   ): Node
 }
-
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   item(where: ItemSubscriptionWhereInput): ItemSubscriptionPayload

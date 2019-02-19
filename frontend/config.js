@@ -6,3 +6,4 @@ const CONFIG = {
 };
 
 export { CONFIG };
+
