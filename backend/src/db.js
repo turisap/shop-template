@@ -1,15 +1,14 @@
+/**
+ * This files connects to the remote Prisma DB and allows us to query it with JS
+ */
+
 const { Prisma } = require('prisma-binding');
 
-
-/**
- * Set ups for connection to a remote prisma DB via JS (Yoga)
- * @type {Prisma}
- */
 const db = new Prisma({
-    typeDefs : "src/generated/prisma.graphql",
+    typeDefs : 'src/generated/prisma.graphql',
     endpoint : process.env.PRISMA_ENDPOINT,
-    secret : process.env.PRISMA_SECRET,
-    debug : false
+    secret   : process.env.PRISMA_SECRET,
+    debug    : process.env.PRISMA_DEBUG
 });
 
 module.exports = db;

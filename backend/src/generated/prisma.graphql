@@ -1,5 +1,5 @@
-# source: https://us1.prisma.sh/kirill-shakirov-5f22b4/shop-template/dev
-# timestamp: Fri Nov 09 2018 20:59:39 GMT+1300 (New Zealand Daylight Time)
+# source: https://us1.prisma.sh/kirill-shakirov-5f22b4/shop-template1/dev
+# timestamp: Tue Feb 19 2019 18:06:26 GMT+1300 (New Zealand Daylight Time)
 
 type AggregateItem {
   count: Int!
@@ -17,9 +17,9 @@ type BatchPayload {
 type Item implements Node {
   id: ID!
   title: String!
-  description: String
-  image: String
-  largeImage: String
+  description: String!
+  image: String!
+  largeImage: String!
   price: Int!
 }
 
@@ -35,9 +35,9 @@ type ItemConnection {
 
 input ItemCreateInput {
   title: String!
-  description: String
-  image: String
-  largeImage: String
+description: String!
+  image: String!
+  largeImage: String!
   price: Int!
 }
 
@@ -72,9 +72,9 @@ enum ItemOrderByInput {
 type ItemPreviousValues {
   id: ID!
   title: String!
-  description: String
-  image: String
-  largeImage: String
+  description: String!
+  image: String!
+  largeImage: String!
   price: Int!
 }
 
@@ -425,14 +425,12 @@ type Query {
   item(where: ItemWhereUniqueInput!): Item
   usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
   itemsConnection(where: ItemWhereInput, orderBy: ItemOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ItemConnection!
-
   """Fetches an object given its ID"""
   node(
     """The ID of an object"""
     id: ID!
   ): Node
 }
-
 type Subscription {
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
   item(where: ItemSubscriptionWhereInput): ItemSubscriptionPayload
