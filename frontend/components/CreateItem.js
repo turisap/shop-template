@@ -6,6 +6,9 @@ import gql from 'graphql-tag';
 import Form from './styles/Form';
 import formatMoney from '../lib/formatMoney';
 import ErrorMessage from '../components/ErrorMessage';
+import { CONFIG } from '../config';
+
+
 
 const CREATE_ITEM_MUTATION = gql`
     mutation CREATE_ITEM_MUTATION(
@@ -40,6 +43,25 @@ class CreateItem extends Component {
         const { name, type, value } = e.target;
         const val = type === 'number' ? parseFloat(value) : value;
         this.setState({ [name] : val });
+    };
+
+    uploadFile = async e => {
+        const files = e.target.files;
+        const data = new FormData();
+        data.append('file', files[0]);
+        data.append('upload_preset', CONFIG.CLOUDINARY_PRESET);
+
+        const res = await fetch(CONFIG.CLOUDINARY_ENDPOINT, {
+            method : "POST",
+            body : data
+        });
+
+        const file = await res.json();
+        console.log('file', file);
+        this.setState({
+            image : file.secure_url,
+            largeImage : file.eager[0].secure_url
+        })
     }
 
     render() {
@@ -58,6 +80,18 @@ class CreateItem extends Component {
                     }}>
                         <ErrorMessage error={error}/>
                         <fieldset disabled={loading} aria-busy={loading}>
+                            <label htmlFor={'file'}>
+                                Picture
+                                <input
+                                    type={'file'}
+                                    id={'file'}
+                                    name={'file'}
+                                    placeholder={'Upload a picture'}
+                                    required
+                                    onChange={this.uploadFile}
+                                />
+                                {this.state.image && <img width="200" src={this.state.image} alt={"Upload preview"}/>}
+                            </label>
                             <label htmlFor={'title'}>
                                 Title
                                 <input

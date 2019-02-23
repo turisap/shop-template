@@ -49,7 +49,7 @@ class SingleItem extends Component {
                     return (
                         <SingleItemStyles>
                             <Head>
-                                <title>{CONFIG.APPLICATION_NAME} | {title}</title>
+                                <title>{CONFIG.SHOP_NAME} | {title}</title>
                             </Head>
                             <img src={largeImage} alt={title} />
                             <div className="details">
