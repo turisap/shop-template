@@ -40,13 +40,7 @@ const UPDATE_ITEM_MUTATION = gql`
 `;
 
 class UpdateItem extends Component {
-    state = {
-        title : "",
-        description : "",
-        image : "",
-        largeImage : "",
-        price : 0
-    };
+    state = {};
 
     /**
      * This is only one handler which works with all inputs at once (lecture 17)
