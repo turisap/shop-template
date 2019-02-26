@@ -53,9 +53,9 @@ class UpdateItem extends Component {
         this.setState({[name] : val});
     };
 
-    updateItem = async (e, updateItemFunction) => {
+    updateItem = async (e, updateItemMutation) => {
         e.preventDefault();
-        const item = await updateItemFunction({
+        const item = await updateItemMutation({
            variables : {
                id : this.props.id,
                ...this.state
@@ -75,8 +75,8 @@ class UpdateItem extends Component {
                             mutation={UPDATE_ITEM_MUTATION}
                             variables={this.state}
                         >
-                            {(updateItemFunction, { loading, error }) => (
-                                <Form onSubmit={ e => this.updateItem(e, updateItemFunction)}>
+                            {(updateItemMutation, { loading, error }) => (
+                                <Form onSubmit={ e => this.updateItem(e, updateItemMutation)}>
                                     <ErrorMessage error={error}/>
                                     {/** setting loading animations and disabling inputs while submitting the form **/}
                                     <fieldset disabled={loading} aria-busy={loading}>
