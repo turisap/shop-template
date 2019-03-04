@@ -1,27 +1,30 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
+import Router from 'next/router';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import Router from 'next/router';
 import Form from './styles/Form';
-import * as CONFIG from '../config';
-import ErrorMessage from './ErrorMessage';
+import formatMoney from '../lib/formatMoney';
+import ErrorMessage from '../components/ErrorMessage';
+import { CONFIG } from '../config';
+
+
 
 const CREATE_ITEM_MUTATION = gql`
-    mutation CREATE_ITEM_MUTATION (
+    mutation CREATE_ITEM_MUTATION(
         $title : String!
         $description : String!
         $price : Int!
-        $image : String,
+        $image : String
         $largeImage : String
-    ){
-        createItem (
+    ) {
+        createItem(
             title : $title
             description : $description
-            price : $price,
-            image : $image,
+            price : $price
+            image : $image
             largeImage : $largeImage
-        )
-        {
+        ) {
             id
         }
     }
@@ -29,112 +32,103 @@ const CREATE_ITEM_MUTATION = gql`
 
 class CreateItem extends Component {
     state = {
-        title : "",
-        description : "",
-        image : "",
-        largeImage : "",
-        price : 0
+        title : 'lol',
+        description : 'piu piu tool',
+        image : 'lol.jpeg',
+        largeImage : 'l.jpeg',
+        price : 45
     };
 
-    /**
-     * This is only one handler which works with all inputs at once (lecture 17)
-     * @param e
-     */
     handleChange = e => {
-        // destructuring the synthetic event and obtaining value as well as type and name of the input
         const { name, type, value } = e.target;
         const val = type === 'number' ? parseFloat(value) : value;
-        this.setState({[name] : value});
-    };
-
-    handleSubmit = async (e, createItemFunction) => {
-        e.preventDefault();
-        const response = await createItemFunction();
-        Router.push({
-            pathname : '/item',
-            query : { id : response.data.createItem.id }
-        })
+        this.setState({ [name] : val });
     };
 
     uploadFile = async e => {
-        console.log('uploading file...');
         const files = e.target.files;
         const data = new FormData();
         data.append('file', files[0]);
-        data.append('upload_preset', 'shop-template');
+        data.append('upload_preset', CONFIG.CLOUDINARY_PRESET);
 
-        const res = await fetch(CONFIG.CLOUDINARY_API_ENDPOINT, {
-            method: 'POST',
-            body: data,
+        const res = await fetch(CONFIG.CLOUDINARY_ENDPOINT, {
+            method : "POST",
+            body : data
         });
+
         const file = await res.json();
-        console.log(file);
+        console.log('file', file);
         this.setState({
-            image: file.secure_url,
-            largeImage: file.eager[0].secure_url,
-        });
-    };
+            image : file.secure_url,
+            largeImage : file.eager[0].secure_url
+        })
+    }
 
     render() {
         return (
-            <Mutation
-                mutation={CREATE_ITEM_MUTATION}
-                variables={this.state}
-            >
-                {(createItemFunction, { loading, error }) => (
-                    <Form onSubmit={ e => this.handleSubmit(e, createItemFunction)}>
+            <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
+                {(createItem, {loading, error}) => (
+                    <Form onSubmit={async e => {
+                        e.preventDefault();
+                        // calling the mutation function and redirect user
+                        const res = await createItem();
+                        console.log(res);
+                        Router.push({
+                            pathname : '/item',
+                            query : { id : res.data.createItem.id }
+                        })
+                    }}>
                         <ErrorMessage error={error}/>
-                        {/** setting loading animations and disabling inputs while submitting the form **/}
                         <fieldset disabled={loading} aria-busy={loading}>
-                            <label htmlFor="file">
-                                Image
+                            <label htmlFor={'file'}>
+                                Picture
                                 <input
-                                    onChange={this.uploadFile}
-                                    type="file"
-                                    id="file"
-                                    name="file"
-                                    placeholder="upload an image"
+                                    type={'file'}
+                                    id={'file'}
+                                    name={'file'}
+                                    placeholder={'Upload a picture'}
                                     required
+                                    onChange={this.uploadFile}
                                 />
-                                {this.state.image && <img src={this.state.image} width={"200"} alt={"upload preview"}/>}
+                                {this.state.image && <img width="200" src={this.state.image} alt={"Upload preview"}/>}
                             </label>
-                            <label htmlFor="title">
+                            <label htmlFor={'title'}>
                                 Title
                                 <input
+                                    type={'text'}
+                                    id={'title'}
+                                    name={'title'}
+                                    placeholder={'Title'}
+                                    required
                                     value={this.state.title}
                                     onChange={this.handleChange}
-                                    type="text"
-                                    id="title"
-                                    name="title"
-                                    placeholder="title"
-                                    required
                                 />
                             </label>
-                            <label htmlFor="price">
+                            <label htmlFor={'price'}>
                                 Price
                                 <input
+                                    type={'number'}
+                                    id={'price'}
+                                    name={'price'}
+                                    placeholder={'Price'}
+                                    required
                                     value={this.state.price}
                                     onChange={this.handleChange}
-                                    type="number"
-                                    id="price"
-                                    name="price"
-                                    placeholder="price"
-                                    required
                                 />
                             </label>
-                            <label htmlFor="description">
+                            <label htmlFor={'price'}>
                                 Description
                                 <textarea
+                                    id={'description'}
+                                    name={'description'}
+                                    placeholder={'Enter a description'}
+                                    required
                                     value={this.state.description}
                                     onChange={this.handleChange}
-                                    id="description"
-                                    name="description"
-                                    placeholder="description"
-                                    required
                                 />
                             </label>
                         </fieldset>
-                        <button>Submit</button>
+                        <button>SUBMIT</button>
                     </Form>
                 )}
             </Mutation>

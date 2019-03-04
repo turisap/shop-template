@@ -5,7 +5,7 @@ import { Query } from 'react-apollo';
 import ErrorMessage from './ErrorMessage';
 import styled from 'styled-components';
 import Head from 'next/head';
-import * as CONFIG from '../config';
+import { CONFIG } from '../config';
 
 const SingleItemStyles = styled.div`
   max-width: 1200px;
@@ -27,40 +27,37 @@ const SingleItemStyles = styled.div`
 `;
 
 const SINGLE_ITEM_QUERY = gql`
-    query SINGLE_ITEM_QUERY ($id : ID!) {
-        item (where : {id : $id}) {
+    query SINGLE_ITEM_QUERY ($id : ID!){
+        item(where : {id : $id}) {
             id
             title
             description
             largeImage
         }
     }
-`;
+`
 
 class SingleItem extends Component {
     render() {
         return (
             <Query query={SINGLE_ITEM_QUERY} variables={{id : this.props.id}}>
-                {({ error, loading, data}) => {
+                {({error, loading, data}) => {
                     if(error) return <ErrorMessage error={error}/>
                     if(loading) return <p>Loading..</p>
-                    if(!data.item) return <p>No item was found mate..</p>
-                    const {title, largeImage, description } = data.item;
-                    return (
-                        <SingleItemStyles>
-                            <Head>
-                                <title>{CONFIG.APPLICATION_NAME} | {title}</title>
-                            </Head>
-                            <img src={largeImage} alt={title} />
-                            <div className="details">
-                                <h2>Viewing {title}</h2>
-                                <p>{description}</p>
-                            </div>
-                        </SingleItemStyles>
-                    )
+                    const item = data.item;
+                    return <SingleItemStyles>
+                        <Head>
+                            <title>{CONFIG.SHOP_NAME} | {item.title}</title>
+                        </Head>
+                        <img src={data.item.largeImage} alt={item.title}/>
+                        <div className={'details'}>
+                            <h2>Viewing {item.title}</h2>
+                            <p>{item.description}</p>
+                        </div>
+                    </SingleItemStyles>
                 }}
             </Query>
-        );
+        )
     }
 }
 

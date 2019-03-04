@@ -3,56 +3,59 @@ import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import Head from 'next/head';
 import Link from 'next/link';
-import * as CONFIG from '../config';
+import { CONFIG } from '../config';
+import PropTypes from 'prop-types';
 import PaginationStyles from './styles/PaginationStyles';
 
 const PAGINATION_QUERY = gql`
     query PAGINATION_QUERY {
         itemsConnection {
-            aggregate { 
-                count 
+            aggregate {
+                count
             }
         }
     }
 `;
 
-
 const Pagination = props => (
     <Query query={PAGINATION_QUERY}>
-        {({data, loading, error}) =>   {
-            if (loading) return <p>Loading..</p>;
-            if (error) return <p>{error}</p>;
-            const count = data.itemsConnection.aggregate.count;
-            const numberOfPages = Math.ceil( count / CONFIG.PERPAGE);
+        {({data, loading, error}) => {
+            const items = data.itemsConnection.aggregate.count;
+            const pages = Math.ceil( items / CONFIG.ITEMS_PER_PAGE);
+            const page = props.page;
             return (
                 <PaginationStyles>
                     <Head>
-                        <title>{CONFIG.APPLICATION_NAME} - Page {props.page} of {numberOfPages}</title>
+                        <title>{CONFIG.SHOP_NAME} - Page {page} of {pages}</title>
                     </Head>
                     <Link
-                        prefetch
-                        href={{
-                            pathname : 'items',
-                            query : { page : props.page - 1}
-                        }}
+                    prefetch
+                    href={{
+                        pathname : 'items',
+                        query : { page : page - 1}
+                    }}
                     >
-                        <a aria-disabled={props.page <= 1}>Prev</a>
+                        <a aria-disabled={page <= 1}>Prev</a>
                     </Link>
-                    <p>Page {props.page} of {numberOfPages}</p>
-                    <p>Total items : {count}</p>
+                    <p>Page {props.page} of {pages}</p>
+                    <p>Items  total : {items}</p>
                     <Link
                         prefetch
                         href={{
                             pathname : 'items',
-                            query : { page : props.page + 1}
+                            query : { page : page + 1}
                         }}
                     >
-                        <a aria-disabled={props.page >= numberOfPages}>Next</a>
+                        <a aria-disabled={page >= pages}>Next</a>
                     </Link>
                 </PaginationStyles>
             )
         }}
     </Query>
 );
+
+Pagination.propTypes = {
+    page : PropTypes.number.isRequired
+}
 
 export default Pagination;

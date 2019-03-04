@@ -1,52 +1,52 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import { ALL_ITEMS_QUERY } from './Items'
+import { ALL_ITEMS_QUERY } from './Items.js'
 
-const DELETE_ITEM = gql`
-    mutation DELETE_ITEM_MUTATION($id : ID!) {
-        deleteItem(id : $id) {
+const DELETE_ITEM_MUTATION = gql`
+    mutation DELETE_ITEM_MUTATION ($id : ID!) {
+        deleteItem(id : $id){
             id
         }
     }
-`
+`;
 
 class DeleteItem extends Component {
     /**
-     * This method is for updating Apollo Client cash to match the server DB
-     * @returns {*}
+     * Manually update cache on client to match server
+     * @param cache
+     * @param payload
      */
     update = (cache, payload) => {
-        // get all items from cache
         const data = cache.readQuery({ query : ALL_ITEMS_QUERY });
-        // filter out the deleted item
+        console.log(data, payload);
         data.items = data.items.filter(item => item.id !== payload.data.deleteItem.id);
-        // put the items back into the cache
-        cache.writeQuery({ query : ALL_ITEMS_QUERY, data });
+        cache.writeQuery({
+            query : ALL_ITEMS_QUERY,
+            data
+        })
     };
 
     render() {
         return (
             <Mutation
-                mutation={DELETE_ITEM}
+                mutation={DELETE_ITEM_MUTATION}
                 variables={{id : this.props.id}}
                 update={this.update}
             >
-                {
-                    (deleteItem, { error }) => (
-                        <button onClick={() => {
-                            if(confirm('Are you sure you want to delete this item')) deleteItem()
-                        }}>
-                            {this.props.children}
-                        </button>
-                    )
-                }
-
+                {(deleteItem, {error}) => (
+                    <button onClick={() => {
+                        if(confirm('Are you sure you wanna delete this item?')) deleteItem();
+                    }}>{this.props.children}</button>
+                )}
             </Mutation>
         );
     }
 }
 
-DeleteItem.propTypes = {};
+DeleteItem.propTypes = {
+    id : PropTypes.string.isRequired
+};
 
 export default DeleteItem;
