@@ -40,7 +40,6 @@ class SignUp extends Component {
                                 e.preventDefault();
                                 const res = await signUpFunction();
                                 this.setState({name : "", email : "", password : ""});
-                                console.log(res);
                             }}
                         >
                             <fieldset disabled={loading} aria-busy={loading}>
