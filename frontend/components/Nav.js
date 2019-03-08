@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import NavStyles from './styles/NavStyles'
 import User from './User';
+import SignOut from './SignOut';
 
 const Nav = props => (
     <User>
@@ -17,6 +18,7 @@ const Nav = props => (
                         <Link href="/sell">
                             <a>Sell</a>
                         </Link>
+                        <SignOut/>
                     </>
                 )}
 
