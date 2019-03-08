@@ -1,5 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { randomBytes } = require('crypto');
+const { promisify } = require('util');
 
 const Mutations = {
 
@@ -68,9 +70,31 @@ const Mutations = {
         return user;
     },
 
+
+
     signout (parent, args, ctx, info) {
         ctx.response.clearCookie('token');
-        return { message : 'GoodBuy' }
+        return {message: 'GoodBuy'}
+    },
+
+
+    async requestReset(parent, args, ctx, info) {
+        const user = _getUser(ctx, args.email);
+        if (!user) throw new Error(`There is no such a user for this ${args.email}`);
+
+        const randomBytesPromisified = promisify(randomBytes);
+        const resetToken = (await randomBytesPromisified(20)).toString('hex');
+        const resetTokenExpiry = Date.now() + 3600000;
+
+        const res = await ctx.db.mutation.updateUser({
+            where : { email : args.email },
+            data  : {
+                resetToken,
+                resetTokenExpiry
+            }
+        });
+        console.log(res);
+        return {message : "Goodbuy"}
     }
 };
 
@@ -89,6 +113,8 @@ const _signInWithToken = (ctx, user, days) => {
         maxAge : 1000 * 60 * 60 * 24 * days
     });
 };
+
+const _getUser = async (ctx, email) => await ctx.db.query.user({where: {email}});
 
 
 module.exports = Mutations;

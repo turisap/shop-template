@@ -1,11 +1,5 @@
 # import * from './generated/prisma.graphql'
 
-# custom type which isn't defined in datamodel.prisma
-type SuccessMessage {
-    message : String!
-}
-
-
 type Mutation {
     createItem(title : String, description : String, price : Int, image : String, largeImage : String) : Item,
     updateItem(id : ID!, title : String, description : String, price : Int) : Item!,
@@ -13,6 +7,7 @@ type Mutation {
     signup(email : String!, password : String!, name : String!) : User!
     signin(email : String!, password : String!) : User!
     signout : SuccessMessage
+    requestReset (email : String!) : SuccessMessage
 }
 
 
@@ -21,4 +16,20 @@ type Query {
     item(where : ItemWhereUniqueInput!) : Item
     itemsConnection(where : ItemWhereInput) : ItemConnection!
     me : User
+}
+
+
+# custom type which isn't defined in datamodel.prisma
+type SuccessMessage {
+    message : String!
+}
+
+
+# this User type is defined for frontend use only and lucks resetToken and password to eleminate risks
+# represented by exposing these values to the client
+type User {
+    id : ID!
+    name : String!
+    email : String!
+    permissions : [Permission!]!
 }
