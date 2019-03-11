@@ -95,6 +95,34 @@ const Mutations = {
         });
         console.log(res);
         return {message : "Goodbuy"}
+    },
+
+    async resetPassword(parent, args, ctx, info) {
+        if (args.password !== args.confirmPassword) throw new Error("Your passwords does not match");
+
+        const [user] = await ctx.db.query.users({
+            where : {
+                resetToken : args.resetToken,
+                resetTokenExpiry_gte : Date.now() - 3600000
+            }
+        });
+
+        if(!user) throw new Error("This reset token is either expired or invalid");
+
+        const password = await bcrypt.hash(args.password, 10);
+
+        const updatedUser = ctx.db.mutation.updateUser({
+            where : { email : user.email },
+            data  : {
+                password,
+                resetToken : null,
+                resetTokenExpiry: null
+            }
+        });
+
+        _signInWithToken(ctx, updatedUser, 2);
+
+        return updatedUser;
     }
 };
 
