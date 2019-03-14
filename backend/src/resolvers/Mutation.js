@@ -8,8 +8,16 @@ const Mutations = {
 
     async createItem(parent, args, ctx, info) {
         // TODO check if user is logged in
+        if(!ctx.request.userId) throw new Error('You must be logged in to do this');
+        console.log(ctx.request)
         const item = await ctx.db.mutation.createItem({
             data: {
+                // this is the relationships between user and item
+                user : {
+                    connect : {
+                        id : ctx.request.userId
+                    }
+                },
                 ...args
             }
         }, info);
@@ -59,6 +67,7 @@ const Mutations = {
 
 
 
+
     async signin(parent, {email, password}, ctx, info) {
         const user = await ctx.db.query.user({where: {email}});
         if (!user) throw new Error(`There is no such a user for this ${email}`);
@@ -73,10 +82,12 @@ const Mutations = {
 
 
 
+
     signout (parent, args, ctx, info) {
         ctx.response.clearCookie('token');
         return {message: 'GoodBuy'}
     },
+
 
 
     async requestReset(parent, args, ctx, info) {
@@ -94,7 +105,7 @@ const Mutations = {
                 resetTokenExpiry
             }
         });
-        
+
         const resRequest = await transport.sendMail({
             from : process.env.MAIL_OWNER_ADDRESS,
             to : args.email,
@@ -105,6 +116,8 @@ const Mutations = {
       
         return {message : "Goodbuy"}
     },
+
+
 
     async resetPassword(parent, args, ctx, info) {
         if (args.password !== args.confirmPassword) throw new Error("Your passwords does not match");
