@@ -1,29 +1,26 @@
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
-import PropTypes from 'prop-types';
+import propTypes from 'prop-types';
 
 const CURRENT_USER_QUERY = gql`
-    query {
-        me{
-            id
-            email
-            name
-            permissions
-        }
+  query {
+    me {
+      id
+      email
+      name
+      permissions
     }
+  }
 `;
 
 const User = props => (
-    <Query
-        query={CURRENT_USER_QUERY}
-        {...props}
-    >
-        {payload => props.children(payload)}
+    <Query {...props} query={CURRENT_USER_QUERY}>
+        {payload =>  props.children(payload)}
     </Query>
 );
 
-User.propTypes = {
-    children : PropTypes.func.isRequired
+User.PropTypes = {
+    children: propTypes.func.isRequired,
 };
 
 export default User;
