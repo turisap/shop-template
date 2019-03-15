@@ -1,8 +1,11 @@
 import CreateItem from '../components/CreateItem';
+import { Authentication } from '../components/Auth';
 
 const Sell = props => (
     <div>
-        <CreateItem/>
+        <Authentication>
+            <CreateItem/>
+        </Authentication>
     </div>
 );
 
