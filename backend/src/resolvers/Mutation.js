@@ -4,7 +4,8 @@ const { randomBytes } = require('crypto');
 const { promisify } = require('util');
 const { transport, makeANiceEmail } = require('../mail');
 const { hasPermission } = require('../utils');
-const { PERMISSIONS } = require('../PermissionTypes');
+const { PERMISSIONS, ALLOWED_DELETE_ITEMS } = require('../PermissionTypes');
+
 
 const Mutations = {
 
@@ -44,8 +45,16 @@ const Mutations = {
     async deleteItem(parent, args, ctx, info) {
         const where = {id: args.id};
         // find the item
-        const item = await ctx.db.query.item({where}, `{ id, title }`);
-        // TODO check permissions
+        const item = await ctx.db.query.item({where}, `{ id title user { id } }`);
+        // check permissions
+        const ownsItem = ctx.request.userId === item.user.id;
+        const hasPermissions = ctx.request.user.permissions.some(permission => {
+            ALLOWED_DELETE_ITEMS.includes(permission)
+        });
+
+        if(!ownsItem && hasPermissions) {
+            throw new Error('You are not allowed to do that');
+        }
         // delete it
         return ctx.db.mutation.deleteItem({where}, info);
     },

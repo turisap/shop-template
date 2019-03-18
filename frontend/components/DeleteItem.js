@@ -36,7 +36,11 @@ class DeleteItem extends Component {
             >
                 {(deleteItem, {error}) => (
                     <button onClick={() => {
-                        if(confirm('Are you sure you wanna delete this item?')) deleteItem();
+                        if(confirm('Are you sure you wanna delete this item?')) {
+                            deleteItem()
+                                // this is how to catch errors from backend
+                                .catch(err => alert(err.message));
+                        }
                     }}>{this.props.children}</button>
                 )}
             </Mutation>
