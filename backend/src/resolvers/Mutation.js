@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const { randomBytes } = require('crypto');
 const { promisify } = require('util');
 const { transport, makeANiceEmail } = require('../mail');
+const { hasPermission } = require('../utils');
+const { PERMISSIONS } = require('../PermissionTypes');
 
 const Mutations = {
 
@@ -145,6 +147,32 @@ const Mutations = {
         _signInWithToken(ctx, updatedUser, 2);
 
         return updatedUser;
+    },
+
+    async updatePermissions (parent, args, ctx, info) {
+        if (!ctx.request.userId) throw new Error('You must be logged in');
+        const user = await ctx.db.query.user({
+            where : {
+                id : ctx.request.userId
+            }
+        }, info);
+
+        console.log("USER", user);
+        if (user) {
+            hasPermission(user, [PERMISSIONS.ADMIN, PERMISSIONS.PERMISSIONUPDATE]);
+
+            // wer use "set" for permissions because it is ENUM type
+            return await ctx.db.mutation.updateUser({
+                data : {
+                    permissions: {
+                        set : args.permissions
+                    }
+                },
+                where : {
+                    id : args.userId
+                }
+            }, info)
+        }
     }
 };
 
