@@ -20,7 +20,6 @@ class DeleteItem extends Component {
      */
     update = (cache, payload) => {
         const data = cache.readQuery({ query : ALL_ITEMS_QUERY });
-        console.log(data, payload);
         data.items = data.items.filter(item => item.id !== payload.data.deleteItem.id);
         cache.writeQuery({
             query : ALL_ITEMS_QUERY,
@@ -37,7 +36,11 @@ class DeleteItem extends Component {
             >
                 {(deleteItem, {error}) => (
                     <button onClick={() => {
-                        if(confirm('Are you sure you wanna delete this item?')) deleteItem();
+                        if(confirm('Are you sure you wanna delete this item?')) {
+                            deleteItem()
+                                // this is how to catch errors from backend
+                                .catch(err => alert(err.message));
+                        }
                     }}>{this.props.children}</button>
                 )}
             </Mutation>
