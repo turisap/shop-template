@@ -57,7 +57,6 @@ class CreateItem extends Component {
         });
 
         const file = await res.json();
-        console.log('file', file);
         this.setState({
             image : file.secure_url,
             largeImage : file.eager[0].secure_url
@@ -72,7 +71,6 @@ class CreateItem extends Component {
                         e.preventDefault();
                         // calling the mutation function and redirect user
                         const res = await createItem();
-                        console.log(res);
                         Router.push({
                             pathname : '/item',
                             query : { id : res.data.createItem.id }
