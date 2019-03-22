@@ -25,7 +25,7 @@ const Cart = () => (
                 {({data}) => (
                     <CartStyles open={data.cartOpen}>
                         <header>
-                            <CloseButton title={"close"} onClick={toggleCart}end
+                            <CloseButton title={"close"} onClick={toggleCart}
                             >&times;</CloseButton>
                             <Supreme>Your cart</Supreme>
                             <p>You have __ items in your cart</p>
