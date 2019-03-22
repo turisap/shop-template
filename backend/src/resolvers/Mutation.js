@@ -220,6 +220,20 @@ const Mutations = {
                 }
             },
         })
+    },
+
+    async removeFromCart(parent, args, ctx, info) {
+        // find the cart item
+        const cartItem = await ctx.db.query.cartItem({
+            where : { id : args.id }
+        }, `{id, user {id}}`);
+        if(!cartItem) throw new Error("Now cart item found");
+
+        return ctx.db.mutation.deleteCartItem({
+            where : {
+                id : args.id
+            }
+        })
     }
 };
 
