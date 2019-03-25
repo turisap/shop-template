@@ -28,11 +28,39 @@ class RemoveFromCart extends React.Component {
         itemId : PropTypes.string.isRequired
     };
 
+
+    // gets called as soon as mutation gets response from the server
+    update = (cache, payload) => {
+        // 1. first read the cache
+        console.log('running update cart')
+        const data = cache.readQuery({query: CURRENT_USER_QUERY});
+        // 2. remove that item from the cart
+        const cartItemId = payload.data.removeFromCart.id;
+        data.me.cart = data.me.cart.filter(cartItem => cartItem.id !== cartItemId);
+        // 3. write it back to the cache
+        cache.writeQuery({query: CURRENT_USER_QUERY, data});
+    }
+
     render() {
+
+        {/* optimisticResponse in Mutation is expected response from the server which allows us to remove item
+            before the actual response comes from the server, which speed up UI
+            lesson 43
+         */}
+
         return (
             <Mutation
                 variables={{id : this.props.itemId}}
-                mutation={REMOVE_FROM_CART_MUTATION}>
+                mutation={REMOVE_FROM_CART_MUTATION}
+                update={this.update}
+                optimisticResponse={{
+                    __typename: 'Mutation',
+                    removeFromCart: {
+                        __typename: 'CartItem',
+                        id: this.props.itemId,
+                    },
+                }}
+            >
                 {(removeFromCart, {loading, error}) => (
                     <StyledButton
                         title="Delete item"
