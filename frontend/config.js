@@ -2,7 +2,8 @@
 const CONFIG = {
     SHOP_NAME : 'TurShop',
     ITEMS_PER_PAGE : 4,
-    END_POINT : 'http://localhost:4444',
+    END_POINT_DEV : 'http://localhost:4444',
+    END_POINT_PROD : 'MY PRODUCTION ENDPOINT',
     CLOUDINARY_PRESET : 'shop_improvements',
     CLOUDINARY_ENDPOINT : 'https://api.cloudinary.com/v1_1/dyqwnbgpw/image/upload',
 };
