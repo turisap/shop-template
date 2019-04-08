@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import Nav from './Nav';
 import { CONFIG } from '../config';
 import Cart from './Cart';
+import Search from './Search';
 
 
 /**
@@ -72,7 +73,7 @@ const Header = () => (
             <Nav/>
         </div>
         <div className="sub-bar">
-            <p>Search</p>
+            <Search/>
         </div>
         <Cart/>
     </StyledHeader>
