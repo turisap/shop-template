@@ -234,6 +234,30 @@ const Mutations = {
                 id : args.id
             }
         })
+    },
+
+    async createOrder(parent, args, ctx, info) {
+        // query the current user and make sure they are signed in
+        const { userId } = ctx.request;
+        if(!userId) throw new Error('You must be signed in to complete this order');
+        const user = await ctx.db.query.user(
+            { where : { id : userId }},
+            `{
+            id
+            name
+            email
+            cart {
+            id
+            quantity
+            item {title price id description image}
+            }
+            }`
+        )
+        console.log('++++++++++++++++++++++++++++++++')
+        console.log(user.cart[0].item)
+        // recalculate amount
+        const amount = user.cart.reduce((tally, cartItem) => tally + cartItem.item.price + cartItem.quantity, 0);
+        console.log(`Going to charge ${amount}`)
     }
 };
 

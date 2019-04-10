@@ -10,27 +10,56 @@ import Error from './ErrorMessage';
 import User, { CURRENT_USER_QUERY} from "./User";
 import { CONFIG } from '../config';
 
+const  CREATE_ORDER_MUTATION = gql`
+    mutation createOrder($token : String!) {
+        createOrder(token : $token) {
+            id
+            charge
+            total
+            items {
+                id
+                title
+            }
+        }
+    }
+`;
+
 class CheckOut extends React.Component {
 
     totalItems = cart => cart.reduce((tally, cartItem) => tally + cartItem.quantity, 0);
 
-    onToken = res => {
-        console.log(res);
+    onToken = (res, createOrder) => {
+        //console.log(res);
+        createOrder({
+            variables : {
+                token : res.id
+            }
+        })
+            .catch(err => alert(err.message))
     }
 
     render() {
         return (
             <User>
-                {({data : { me }}) => <StripeCheckOut
-                    amount={calcTotalPrice(me.cart)}
-                    name={CONFIG.SHOP_NAME}
-                    description={`Order of ${this.totalItems(me.cart)} items`}
-                    image={me.cart[0].item && me.cart[0].item.image}
-                    stripeKey={CONFIG.STRIPE_PUBLISHABLE_KEY}
-                    currency={CONFIG.CURRENCY}
-                    email={me.email}
-                    token={console.log}
-                >{this.props.children}</StripeCheckOut>}
+                {({data : { me }}) => (
+                    <Mutation
+                        mutation={CREATE_ORDER_MUTATION}
+                        refetchQueries={[{ query : CURRENT_USER_QUERY }]}
+                    >
+                        {createOrder => (
+                            <StripeCheckOut
+                                amount={calcTotalPrice(me.cart)}
+                                name={CONFIG.SHOP_NAME}
+                                description={`Order of ${this.totalItems(me.cart)} items`}
+                                image={me.cart[0].item && me.cart[0].item.image}
+                                stripeKey={CONFIG.STRIPE_PUBLISHABLE_KEY}
+                                currency={CONFIG.CURRENCY}
+                                email={me.email}
+                                token={res => this.onToken(res, createOrder)}
+                            >{this.props.children}</StripeCheckOut>
+                        )}
+                    </Mutation>
+                )}
             </User>
         )
     }
