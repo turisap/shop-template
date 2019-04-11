@@ -238,6 +238,7 @@ const Mutations = {
         })
     },
 
+
     async createOrder(parent, args, ctx, info) {
         // query the current user and make sure they are signed in
         const { userId } = ctx.request;
@@ -251,7 +252,7 @@ const Mutations = {
             cart {
             id
             quantity
-            item {title price id description image}
+            item {title price id description image largeImage}
             }
             }`
         );
@@ -267,6 +268,38 @@ const Mutations = {
             currency : process.env.CURRENCY,
             source : args.token
         });
+
+        // convert the cartItems to orderItems
+        const orderItems = user.cart.map(cartItem => {
+            const orderItem = {
+                ...cartItem.item,
+                quantity: cartItem.quantity,
+                // relationships to user
+                user : { connect : { id : user.id }}
+            };
+            // remove id as it was copied from cartItem, but should be created by prisma
+            delete orderItem.id;
+            return orderItem;
+        });
+
+        // create an order
+        const order = ctx.db.mutation.createOrder({
+            data : {
+                total : charge.amount,
+                charge : charge.id,
+                items : { create : orderItems },
+                user : { connect : { id : userId }}
+            }
+        });
+
+        const cartItemIds = user.cart.map(cartItem => cartItem.id);
+        await ctx.db.mutation.deleteManyCartItems({
+            where : {
+                id_in : cartItemIds
+            }
+        });
+
+        return order;
     }
 };
 
