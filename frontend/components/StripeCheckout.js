@@ -51,7 +51,7 @@ class CheckOut extends React.Component {
                                 amount={calcTotalPrice(me.cart)}
                                 name={CONFIG.SHOP_NAME}
                                 description={`Order of ${this.totalItems(me.cart)} items`}
-                                image={me.cart[0].item && me.cart[0].item.image}
+                                image={me.cart[0] && me.cart[0].item && me.cart[0].item.image}
                                 stripeKey={CONFIG.STRIPE_PUBLISHABLE_KEY}
                                 currency={CONFIG.CURRENCY}
                                 email={me.email}

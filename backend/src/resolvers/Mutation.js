@@ -5,6 +5,8 @@ const { promisify } = require('util');
 const { transport, makeANiceEmail } = require('../mail');
 const { hasPermission } = require('../utils');
 const { PERMISSIONS, ALLOWED_DELETE_ITEMS } = require('../PermissionTypes');
+const stripe = require('../stripe');
+
 
 
 const Mutations = {
@@ -252,12 +254,19 @@ const Mutations = {
             item {title price id description image}
             }
             }`
-        )
-        console.log('++++++++++++++++++++++++++++++++')
-        console.log(user.cart[0].item)
+        );
+        // console.log('++++++++++++++++++++++++++++++++')
+        // console.log(user.cart[0].item)
         // recalculate amount
         const amount = user.cart.reduce((tally, cartItem) => tally + cartItem.item.price + cartItem.quantity, 0);
-        console.log(`Going to charge ${amount}`)
+        console.log(`Going to charge ${amount}`);
+
+        // create a stripe charge (turn the token into money)
+        const charge = await stripe.charges.create({
+            amount,
+            currency : process.env.CURRENCY,
+            source : args.token
+        });
     }
 };
 
