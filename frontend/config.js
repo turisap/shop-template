@@ -6,6 +6,9 @@ const CONFIG = {
     END_POINT_PROD : 'MY PRODUCTION ENDPOINT',
     CLOUDINARY_PRESET : 'shop_improvements',
     CLOUDINARY_ENDPOINT : 'https://api.cloudinary.com/v1_1/dyqwnbgpw/image/upload',
+    STRIPE_PUBLISHABLE_KEY : 'pk_test_ytLlKjz9U0X0SSqy8swdzAX600QBo7AsYA',
+    CURRENCY : 'NZD',
+
 };
 
 export { CONFIG };
