@@ -10,7 +10,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "see ./backend or ./frontend",
-    "app" : "concurrently \"cd frontend && npm run dev\" \"cd backend && npm run dev\""
+    "app": "concurrently \"cd frontend && npm run dev\" \"cd backend && npm run dev\""
   },
   "repository": {
     "type": "git",
