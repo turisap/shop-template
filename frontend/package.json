@@ -4,11 +4,12 @@
   "description": "shop application",
   "main": "index.js",
   "scripts": {
+    "globals" : "npm i -g cross-env",
     "dev": "next -p 7777",
     "build": "next build",
     "start": "next start",
-    "test": "NODE_ENV=test jest --watch",
-    "test-win": "SET NODE_ENV=test&& jest --watch",
+    "test": "cross-env NODE_ENV=test jest --watch",
+    "test-win": "SET NODE_ENV=test & jest --watch",
     "heroku-postbuild": "next build"
   },
   "author": "turisap",
