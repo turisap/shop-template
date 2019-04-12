@@ -31,10 +31,10 @@ const Query = {
 
     async order(parent, arg, ctx, info) {
         // make sure the user is logged in
-        if(!context.request.userId) throw new Error('you must be logged in');
+        if(!ctx.request.userId) throw new Error('you must be logged in');
         // query th current user
         const order = await ctx.db.query.order({
-            where : { id : args.id }
+            where : { id : arg.id }
         }, info);
         // check if the user has permissions to see this order
         const ownsOrder = order.user.id === ctx.request.userId;
