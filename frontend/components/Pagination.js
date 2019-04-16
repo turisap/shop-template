@@ -20,13 +20,17 @@ const PAGINATION_QUERY = gql`
 const Pagination = props => (
     <Query query={PAGINATION_QUERY}>
         {({data, loading, error}) => {
+            if(loading) return <p>Loading..</p>;
+            if(error) return error;
             const items = data.itemsConnection.aggregate.count;
             const pages = Math.ceil( items / CONFIG.ITEMS_PER_PAGE);
             const page = props.page;
             return (
-                <PaginationStyles>
+                <PaginationStyles data-test="pagination">
                     <Head>
-                        <title>{CONFIG.SHOP_NAME} - Page {page} of {pages}</title>
+                        <title>{CONFIG.SHOP_NAME} - Page {page} of {pages}
+
+                        </title>
                     </Head>
                     <Link
                     prefetch
@@ -35,9 +39,9 @@ const Pagination = props => (
                         query : { page : page - 1}
                     }}
                     >
-                        <a aria-disabled={page <= 1}>Prev</a>
+                        <a aria-disabled={page <= 1} className='prev'>Prev</a>
                     </Link>
-                    <p>Page {props.page} of {pages}</p>
+                    <p>Page {props.page} of <span className='totalPages'>{pages}</span></p>
                     <p>Items  total : {items}</p>
                     <Link
                         prefetch
@@ -46,7 +50,7 @@ const Pagination = props => (
                             query : { page : page + 1}
                         }}
                     >
-                        <a aria-disabled={page >= pages}>Next</a>
+                        <a aria-disabled={page >= pages} className='next'>Next</a>
                     </Link>
                 </PaginationStyles>
             )
@@ -59,3 +63,4 @@ Pagination.propTypes = {
 }
 
 export default Pagination;
+export { PAGINATION_QUERY };
