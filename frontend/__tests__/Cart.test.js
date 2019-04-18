@@ -24,6 +24,21 @@ const mocks = [
     }
 ];
 
+const mockedMutationCall = [
+    {
+        request : { query : CURRENT_USER_QUERY },
+        result : { data : { me : {
+                    ...fakeUser(),
+                    cart : []
+                }
+            }
+        }
+    },
+    {
+        request : { query : ADD_}
+    }
+];
+
 describe('<Cart/>', () => {
     it('renders and matches snappy', async () => {
         const wrapper = mount(
@@ -34,5 +49,10 @@ describe('<Cart/>', () => {
         await wait();
         wrapper.update();
         expect(toJSON(wrapper.find('header'))).toMatchSnapshot();
+        expect(wrapper.find('CartItem')).toHaveLength(1);
+    });
+
+    it('adds to cart on button clicks', async() => {
+
     })
 })
