@@ -9,7 +9,7 @@ import CartCount from "./CartCount";
 const Nav = props => (
     <User>
         {({data : {me}}) => (
-            <NavStyles>
+            <NavStyles data-test="nav">
                 {me && (
                     <>
                         <Link href="/orders">

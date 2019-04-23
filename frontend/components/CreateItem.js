@@ -32,11 +32,11 @@ const CREATE_ITEM_MUTATION = gql`
 
 class CreateItem extends Component {
     state = {
-        title : 'lol',
-        description : 'piu piu tool',
-        image : 'lol.jpeg',
-        largeImage : 'l.jpeg',
-        price : 45
+        title : '',
+        description : '',
+        image : '',
+        largeImage : '',
+        price : 0
     };
 
     handleChange = e => {
@@ -67,7 +67,9 @@ class CreateItem extends Component {
         return (
             <Mutation mutation={CREATE_ITEM_MUTATION} variables={this.state}>
                 {(createItem, {loading, error}) => (
-                    <Form onSubmit={async e => {
+                    <Form
+                        data-test="create-item-form"
+                        onSubmit={async e => {
                         e.preventDefault();
                         // calling the mutation function and redirect user
                         const res = await createItem();
