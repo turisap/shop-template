@@ -15,7 +15,7 @@ const RESET_REQUEST_MUTATION = gql`
 `;
 
 
-class SignIn extends Component {
+class RequestReset extends Component {
     state = {
         email : ""
     };
@@ -35,6 +35,7 @@ class SignIn extends Component {
                 {(resetFunction, {error, loading, called}) => {
                     return (
                         <Form
+                            data-test="reset-form"
                             method="post"
                             onSubmit={async e => {
                                 e.preventDefault();
@@ -66,6 +67,7 @@ class SignIn extends Component {
     }
 }
 
-SignIn.propTypes = {};
+RequestReset.propTypes = {};
 
-export default SignIn;
+export default RequestReset;
+export { RESET_REQUEST_MUTATION };
