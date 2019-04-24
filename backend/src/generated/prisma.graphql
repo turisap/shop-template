@@ -1,5 +1,5 @@
-# source: https://us1.prisma.sh/kirill-shakirov-5f22b4/shop-template1/dev
-# timestamp: Fri Apr 12 2019 18:55:23 GMT+1200 (New Zealand Standard Time)
+# source: https://shop-template-dev-4663c2addf.herokuapp.com/shop-template-test/dev
+# timestamp: Wed Apr 24 2019 19:41:58 GMT+1200 (New Zealand Standard Time)
 
 type AggregateCartItem {
   count: Int!
@@ -44,7 +44,6 @@ type CartItemConnection {
 }
 
 input CartItemCreateInput {
-  id: ID
   quantity: Int
   item: ItemCreateOneInput
   user: UserCreateOneWithoutCartInput!
@@ -56,7 +55,6 @@ input CartItemCreateManyWithoutUserInput {
 }
 
 input CartItemCreateWithoutUserInput {
-  id: ID
   quantity: Int
   item: ItemCreateOneInput
 }
@@ -215,7 +213,6 @@ input CartItemUpdateManyMutationInput {
 input CartItemUpdateManyWithoutUserInput {
   create: [CartItemCreateWithoutUserInput!]
   connect: [CartItemWhereUniqueInput!]
-  set: [CartItemWhereUniqueInput!]
   disconnect: [CartItemWhereUniqueInput!]
   delete: [CartItemWhereUniqueInput!]
   update: [CartItemUpdateWithWhereUniqueWithoutUserInput!]
@@ -347,7 +344,6 @@ type ItemConnection {
 }
 
 input ItemCreateInput {
-  id: ID
   title: String!
   description: String!
   image: String!
@@ -787,7 +783,6 @@ type OrderConnection {
 }
 
 input OrderCreateInput {
-  id: ID
   total: Int!
   charge: String!
   items: OrderItemCreateManyInput
@@ -825,7 +820,6 @@ type OrderItemConnection {
 }
 
 input OrderItemCreateInput {
-  id: ID
   title: String!
   description: String!
   image: String!
@@ -1206,7 +1200,6 @@ input OrderItemUpdateManyDataInput {
 input OrderItemUpdateManyInput {
   create: [OrderItemCreateInput!]
   connect: [OrderItemWhereUniqueInput!]
-  set: [OrderItemWhereUniqueInput!]
   disconnect: [OrderItemWhereUniqueInput!]
   delete: [OrderItemWhereUniqueInput!]
   update: [OrderItemUpdateWithWhereUniqueNestedInput!]
@@ -1815,7 +1808,6 @@ type UserConnection {
 }
 
 input UserCreateInput {
-  id: ID
   name: String!
   email: String!
   password: String!
@@ -1840,7 +1832,6 @@ input UserCreatepermissionsInput {
 }
 
 input UserCreateWithoutCartInput {
-  id: ID
   name: String!
   email: String!
   password: String!

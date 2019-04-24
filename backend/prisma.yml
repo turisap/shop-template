@@ -1,5 +1,8 @@
-endpoint: ${env:PRISMA_ENDPOINT}
-# secret: ${env:PRISMA_SECRET}
+#endpoint: ${env:PRISMA_ENDPOINT}
+#endpoint: https://eu1.prisma.sh/kirill-shakirov-5f22b4/shop-template/dev
+endpoint: https://shop-template-dev-4663c2addf.herokuapp.com/shop-template-test/dev
+
+secret: ${env:PRISMA_SECRET}
 datamodel: datamodel.prisma
 hooks:
   post-deploy:
