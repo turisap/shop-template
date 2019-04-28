@@ -3,11 +3,15 @@
   "version": "1.0.0",
   "description": "shop application",
   "main": "index.js",
+  "engines": {
+    "node": "10.15.3",
+    "npm": "6.4.1"
+  },
   "scripts": {
-    "globals" : "npm i -g cross-env",
+    "globals": "npm i -g cross-env",
     "dev": "next -p 7777",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p $PORT",
     "test": "cross-env NODE_ENV=test jest --watch",
     "test-win": "SET NODE_ENV=test & jest --watch",
     "heroku-postbuild": "next build"
