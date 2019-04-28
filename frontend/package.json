@@ -14,7 +14,7 @@
     "start": "next start -p $PORT",
     "test": "cross-env NODE_ENV=test jest --watch",
     "test-win": "SET NODE_ENV=test & jest --watch",
-    "heroku-postbuild": "echo TRATATATATATATATATATAT"
+    "heroku-postbuild": "next build"
   },
   "author": "turisap",
   "license": "ISC",
