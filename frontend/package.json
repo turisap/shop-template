@@ -10,11 +10,11 @@
   "scripts": {
     "globals": "npm i -g cross-env",
     "dev": "next -p 7777",
-    "build": "next build",
+    "build": "cross-env NODE_ENV=production next build",
     "start": "next start -p $PORT",
     "test": "cross-env NODE_ENV=test jest --watch",
     "test-win": "SET NODE_ENV=test & jest --watch",
-    "heroku-postbuild": "next build"
+    "heroku-postbuild": "cross-env NODE_ENV=production  next build"
   },
   "author": "turisap",
   "license": "ISC",
